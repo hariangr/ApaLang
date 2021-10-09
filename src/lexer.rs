@@ -24,7 +24,7 @@ pub struct Lexer {
 impl Lexer {
     fn parse_string(text: &str) -> Lexer {
         let mut _token: Vec<Token> = vec![];
-        fn add_buff_parsed(__token: &mut Vec<Token>, __buff: &String) {
+        fn __add_buff_parsed(__token: &mut Vec<Token>, __buff: &String) {
             __token.push(match __buff.trim().parse::<i32>() {
                 Ok(_) => Token {
                     token: __buff.clone(),
@@ -46,7 +46,7 @@ impl Lexer {
         for it in text.chars() {
             if OPERATOR.contains(it) {
                 if !buff.is_empty() {
-                    add_buff_parsed(&mut _token, &buff);
+                    __add_buff_parsed(&mut _token, &buff);
                     buff.clear();
                 }
 
@@ -60,7 +60,7 @@ impl Lexer {
         }
 
         if !buff.is_empty() {
-            add_buff_parsed(&mut _token, &buff);
+            __add_buff_parsed(&mut _token, &buff);
             buff.clear();
         }
 
