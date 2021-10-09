@@ -1,12 +1,14 @@
 use std::vec;
 
-const OPERATOR: &str = "*/+-";
+const OPERATOR: &str = "*/+-()";
+const WHITESPACE: &str = " \n";
 
 #[derive(Debug)]
 pub enum TokenKind {
     Number,
     Operator,
     Word,
+    Whitespace,
 }
 
 #[derive(Debug)]
@@ -30,7 +32,11 @@ impl Lexer {
                 },
                 Err(_) => Token {
                     token: __buff.clone(),
-                    kind: TokenKind::Word,
+                    kind: if WHITESPACE.contains(__buff) {
+                        TokenKind::Whitespace
+                    } else {
+                        TokenKind::Word
+                    },
                 },
             });
         }
@@ -67,14 +73,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn basic_oneliner_math() {
-        const FORMULA: &str = "3 + 5";
+    fn using_bracket() {
+        const FORMULA: &str = "3 + (5 / 8) * 3 + 2";
         let lexer = Lexer::parse_string(FORMULA);
         println!("{:?}", lexer)
     }
+
     #[test]
     fn long_oneliner_math() {
         const FORMULA: &str = "3 + 5 / 8 * 3 + 2";
+        let lexer = Lexer::parse_string(FORMULA);
+        println!("{:?}", lexer)
+    }
+
+    #[test]
+    fn basic_oneliner_math() {
+        const FORMULA: &str = "3 + 5";
         let lexer = Lexer::parse_string(FORMULA);
         println!("{:?}", lexer)
     }
