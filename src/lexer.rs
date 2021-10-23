@@ -17,7 +17,7 @@ pub struct Token {
     pub kind: TokenKind,
 }
 
-trait SimplifyTokens {
+pub trait SimplifyTokens {
     fn simplify_tokens(&self) -> String;
     fn no_whitespace(&self) -> Vec<Token>;
 }

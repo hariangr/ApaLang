@@ -1,3 +1,4 @@
+use super::lexer::SimplifyTokens;
 use super::lexer::Token;
 use crate::lexer::TokenKind;
 use std::vec;
@@ -28,10 +29,10 @@ impl Token {
     }
 }
 
-struct Parser {}
+pub struct Parser {}
 impl Parser {
     /// Using shunting algorithm
-    fn parse(tokens: Vec<Token>) -> Vec<Token> {
+    pub fn parse(tokens: Vec<Token>) -> Vec<Token> {
         let mut output: Vec<Token> = vec![];
         let mut operator: Vec<Token> = vec![];
 
@@ -63,8 +64,11 @@ impl Parser {
             }
         }
 
-        for it in operator {
-            output.push(it);
+        // for it in operator {
+        //     output.push(it);
+        // }
+        while operator.len() > 0 {
+            output.push(operator.pop().unwrap());
         }
 
         println!("OUTPUT {:?}", output);
@@ -79,12 +83,38 @@ mod tests {
     use super::*;
 
     #[test]
+    fn long_oneliner_math() {
+        const FORMULA: &str = "3 + 5 / 8 * 3 + 2"; 
+        let parsed = Lexer::parse_string(FORMULA).tokens;
+
+        let r = Parser::parse(parsed);
+
+        let res = r.no_whitespace().simplify_tokens();
+        assert_eq!(res, "358/3*2++"); // (3 + (((5 / 8) * 3) + 2))
+    }
+
+    #[test]
+    fn with_multiply() {
+        let formula = "5 + 3 * 2"; // 5 3 2 * +      |       + *
+
+        let parsed = Lexer::parse_string(formula).tokens;
+
+        let r = Parser::parse(parsed);
+
+        let res = r.no_whitespace().simplify_tokens();
+        assert_eq!(res, "532*+");
+    }
+
+    #[test]
     fn long_math() {
         let formula = "5 + 3 / 3 + 10"; // 5 3 3 / 10 + +
 
         let parsed = Lexer::parse_string(formula).tokens;
 
         let r = Parser::parse(parsed);
+
+        let res = r.no_whitespace().simplify_tokens();
+        assert_eq!(res, "533/10++");
     }
 
     #[test]
