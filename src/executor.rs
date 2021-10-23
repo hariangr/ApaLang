@@ -55,8 +55,6 @@ mod tests {
         let lexer = Lexer::parse_string(FORMULA);
 
         let parsed = Parser::parse(lexer.tokens);
-        println!("parsed {:?}", parsed);
-
         let executed = Executor::calculate(parsed);
         assert_eq!(executed, 5)
     }
@@ -67,8 +65,6 @@ mod tests {
         let lexer = Lexer::parse_string(FORMULA);
 
         let parsed = Parser::parse(lexer.tokens);
-        println!("parsed {:?}", parsed);
-
         let executed = Executor::calculate(parsed);
         assert_eq!(executed, 13);
     }

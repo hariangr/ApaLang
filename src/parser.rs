@@ -52,11 +52,9 @@ impl Parser {
                     if it.get_precedence() < prior_token.get_precedence()
                         || it.get_precedence() == prior_token.get_precedence()
                     {
-                        println!("A");
                         operator.push(it);
                         output.push(prior_token);
                     } else {
-                        println!("B");
                         operator.push(prior_token);
                         operator.push(it);
                     }
@@ -64,14 +62,10 @@ impl Parser {
             }
         }
 
-        // for it in operator {
-        //     output.push(it);
-        // }
         while operator.len() > 0 {
             output.push(operator.pop().unwrap());
         }
 
-        println!("OUTPUT {:?}", output);
         output
     }
 }
@@ -123,7 +117,5 @@ mod tests {
         let parsed = Lexer::parse_string(formula).tokens;
 
         let r = Parser::parse(parsed);
-
-        println!("Entah {:?}", r);
     }
 }
